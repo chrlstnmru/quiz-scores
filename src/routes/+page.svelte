@@ -22,9 +22,10 @@
 
 	$effect(() => {
 		if ($message) {
-			setTimeout(() => {
+			const timeout = setTimeout(() => {
 				message.set(null);
-			}, 5000);
+				clearTimeout(timeout);
+			}, 8000);
 		}
 	});
 </script>
