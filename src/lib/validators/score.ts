@@ -23,6 +23,7 @@ export const deleteScoreFormSchema = z.object({
 export type DeleteScoreForm = z.infer<typeof deleteScoreFormSchema>;
 
 export const accessCodeFormSchema = z.object({
+	name: z.string().nonempty('Name is required'),
 	accessCode: z.string().nonempty('Access code is required').toUpperCase()
 });
 export type AccessCodeForm = z.infer<typeof accessCodeFormSchema>;

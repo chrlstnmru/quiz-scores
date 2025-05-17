@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Search from '@lucide/svelte/icons/search';
+	import LogOut from '@lucide/svelte/icons/log-out';
 
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
@@ -10,6 +10,7 @@
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import Score from '$lib/components/score.svelte';
 	import DeleteScore from '$lib/components/delete-score.svelte';
+	import { enhance } from '$app/forms';
 
 	let { data } = $props();
 
@@ -48,9 +49,6 @@
 		<div class="mb-6 flex items-center justify-between">
 			<form class="flex items-center space-x-2" method="get">
 				<Input placeholder="Search..." type="search" bind:value={searchTerm} />
-				<!-- <Button class="aspect-square" size="icon">
-					<Search />
-				</Button> -->
 			</form>
 
 			<div>
@@ -72,6 +70,13 @@
 				{/each}
 			</div>
 		</ScrollArea>
+
+		<form class="mt-3 w-full" action="?/logout" method="post" use:enhance>
+			<Button class="w-full" type="submit" variant="secondary">
+				<LogOut />
+				Logout
+			</Button>
+		</form>
 	</div>
 </main>
 

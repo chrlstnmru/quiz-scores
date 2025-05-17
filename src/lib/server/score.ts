@@ -2,7 +2,7 @@ import { generateId } from '$lib/utils';
 import type { CreateScoreForm, EditScoreForm } from '$lib/validators/score';
 import { eq, getTableColumns, sql } from 'drizzle-orm';
 import { db } from './db';
-import { scoreTable } from './db/schema';
+import { lower, scoreTable } from './db/schema';
 import { decryptAccessCode, encryptAccessCode } from './password';
 
 export async function createScore({ accessCode, name, score }: CreateScoreForm) {
@@ -67,19 +67,20 @@ export async function getAllScores() {
 	return decryptedScores;
 }
 
-export async function getScoreByAccessCode(accessCode: string) {
-	const encryptedAccessCode = encryptAccessCode(accessCode).encryptedData;
+export async function getScore(name: string, accessCode: string) {
 	const [score] = await db.query.scoreTable.findMany({
-		where: eq(scoreTable.accessCode, encryptedAccessCode),
-		columns: {
-			accessCode: false,
-			iv: false
-		}
+		where: eq(lower(scoreTable.name), name.toLowerCase())
 	});
 
 	if (!score) {
 		throw new Error('Score not found');
 	}
 
-	return score;
+	const decryptedAccessCode = decryptAccessCode(score.accessCode, score.iv);
+	if (decryptedAccessCode !== accessCode) {
+		throw new Error('Invalid access code');
+	}
+
+	const { iv: _, accessCode: __, ...restData } = score;
+	return restData;
 }

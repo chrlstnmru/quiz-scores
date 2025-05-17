@@ -1,3 +1,4 @@
+import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import { createScore, deleteScore, editScore, getAllScores } from '$lib/server/score';
 import { tryCatch } from '$lib/utils';
@@ -6,6 +7,7 @@ import {
 	deleteScoreFormSchema,
 	editScoreFormSchema
 } from '$lib/validators/score';
+import { redirect } from '@sveltejs/kit';
 import { fail, message, setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
@@ -77,5 +79,14 @@ export const actions = {
 	},
 	clearScores: async () => {
 		await db.execute('TRUNCATE TABLE scores');
+	},
+	logout: async (event) => {
+		if (!event.locals.user || !event.locals.session) {
+			return redirect(302, '/admin/login');
+		}
+
+		invalidateSession(event.locals.session.id);
+		deleteSessionTokenCookie(event);
+		return redirect(302, '/admin/login');
 	}
 };

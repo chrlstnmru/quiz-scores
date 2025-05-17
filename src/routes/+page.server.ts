@@ -1,4 +1,4 @@
-import { getScoreByAccessCode } from '$lib/server/score';
+import { getScore } from '$lib/server/score';
 import { tryCatch } from '$lib/utils';
 import { accessCodeFormSchema } from '$lib/validators/score';
 import { message, superValidate } from 'sveltekit-superforms';
@@ -17,8 +17,8 @@ export const actions = {
 			return { accessCodeForm };
 		}
 
-		const { accessCode } = accessCodeForm.data;
-		const { data, error } = await tryCatch(getScoreByAccessCode(accessCode));
+		const { name, accessCode } = accessCodeForm.data;
+		const { data, error } = await tryCatch(getScore(name, accessCode));
 		if (error) {
 			console.error(error);
 			return message(accessCodeForm, { type: 'error', text: 'Score not found' }, { status: 500 });
