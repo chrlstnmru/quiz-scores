@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { superForm } from 'sveltekit-superforms';
-	import LoaderCicle from '@lucide/svelte/icons/loader-circle';
+	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
@@ -60,7 +60,7 @@
 			<div class="w-full pt-3">
 				<Form.Button class="w-full">
 					{#if $delayed}
-						<LoaderCicle class="animate-spin" />
+						<LoaderCircle class="animate-spin" />
 					{/if}
 					Submit
 				</Form.Button>

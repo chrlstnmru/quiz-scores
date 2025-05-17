@@ -19,7 +19,7 @@ export const actions = {
 
 		const { username, password } = setupForm.data;
 
-		const { _, error } = await tryCatch(createAdmin(username, password));
+		const { data: _, error } = await tryCatch(createAdmin(username, password));
 		if (error) {
 			return message(setupForm, { type: 'error', text: error.message }, { status: 500 });
 		}
